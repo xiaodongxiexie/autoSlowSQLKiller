@@ -8,7 +8,7 @@ import enum
 
 from apscheduler.schedulers.background import BlockingScheduler
 
-from . import query as _query
+from .query import query as _query
 
 
 logger = logging.getLogger("sql.sentinel")
