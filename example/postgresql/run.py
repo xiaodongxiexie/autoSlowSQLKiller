@@ -15,6 +15,7 @@ if __name__ == '__main__':
     logger.setLevel(logging.DEBUG)
 
     sentinel = Sentinel()
+    sentinel.url = "postgresql://user-name:password@your-host:5432/your-database"
     sentinel.mock = True
     sentinel.GLOBAL_ALLOW_MAX_ETL_SECONDS = 15
 
