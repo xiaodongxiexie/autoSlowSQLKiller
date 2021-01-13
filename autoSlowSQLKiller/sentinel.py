@@ -42,7 +42,7 @@ class Sentinel:
     """
     巡检，用于自动 kill 带有允许kill标志的属于自己的 SQL 查询
     """
-    url: str = Settiings.SQLAlchemy.recom_gp_url
+    url: str = None
     mock: bool = True
     strategy: Strategy = Strategy.mmin
     ALLOW_KILL: str = "allow-kill"
