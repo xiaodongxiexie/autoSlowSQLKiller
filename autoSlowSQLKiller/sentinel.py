@@ -25,8 +25,8 @@ LOW_QUERY = """
                 round((extract(epoch from (current_timestamp - query_start)))::numeric, 2)  as timeuse
             FROM
                 pg_stat_activity
-            where usename = 'htd_dw'
-            and current_query <> '<IDLE>'
+            where 
+                current_query <> '<IDLE>'
             and current_query like '%{query_label}%'
 """
 CANCEL_QUERY = """select pgadmin.cancel_process({procpid})"""
