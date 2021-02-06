@@ -5,7 +5,6 @@
 import logging
 
 from autoSlowSQLKiller.sentinel import Sentinel
-from apscheduler.schedulers.background import BlockingScheduler
 
 logger = logging.getLogger("sql")
 
@@ -23,10 +22,9 @@ when mock set as True, then kill process action just be logging but not execute.
 """
 
 
-
-
 if __name__ == '__main__':
-
+ 
+    logging.basicConfig(level=logging.DEBUG)
     logger.setLevel(logging.DEBUG)
 
     sentinel = Sentinel()
@@ -34,10 +32,4 @@ if __name__ == '__main__':
     sentinel.mock = True
     sentinel.GLOBAL_ALLOW_MAX_ETL_SECONDS = 15
 
-    scheduler = BlockingScheduler()
-    scheduler.add_job(
-        func=sentinel.pipe,
-        args=["==allow-kill=True"],
-        trigger="interval", seconds=60,
-    )
-    scheduler.start()
+    sentinel.start(interval_seconds=5)
