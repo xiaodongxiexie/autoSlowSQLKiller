@@ -37,7 +37,7 @@ class Strategy(enum.Enum):
     mmax = max
 
 
-class Sentinel:
+class _Sentinel:
     """
     巡检，用于自动 kill 带有允许kill标志的属于自己的 SQL 查询
     """
