@@ -13,21 +13,20 @@ from .query import query as _query
 
 logger = logging.getLogger("sql.sentinel")
 
-
 LOW_QUERY = """
-            SELECT
-                datname,
-                procpid,
-                sess_id,
-                usename,
-                current_query,
-                query_start,
-                round((extract(epoch from (current_timestamp - query_start)))::numeric, 2)  as timeuse
-            FROM
-                pg_stat_activity
-            where 
-                current_query <> '<IDLE>'
-            and current_query like '%{query_label}%'
+SELECT
+    datname,
+    procpid,
+    sess_id,
+    usename,
+    current_query,
+    query_start,
+    ROUND((EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - query_start)))::NUMERIC, 2)  AS timeuse
+FROM
+    pg_stat_activity
+WHERE 
+    current_query <> '<IDLE>'
+AND current_query LIKE '%{query_label}%'
 """
 CANCEL_QUERY = """select pgadmin.cancel_process({procpid})"""
 TERMINATE_QUERY = """select pgadmin.terminate_process({procpid})"""
@@ -106,3 +105,16 @@ class Sentinel:
             if allow_kill and r.timeuse > allow_max_etl_seconds:
                 logger.warning("%ssql: %s, time use: %s", ["", "[MOCK]"][self.mock], r.current_query, r.timeuse)
                 self.kill(r.procpid)
+             
+            
+class Sentinel(_Sentinel):
+
+    def start(self, interval_seconds: int = 30):
+        scheduler = BlockingScheduler()
+        scheduler.add_job(
+            func=self.pipe,
+            args=[f"{self.ALLOW_KILL}=True"],
+            trigger="interval", seconds=interval_seconds,
+        )
+        scheduler.start()
+
