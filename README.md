@@ -14,6 +14,7 @@
 import logging
 
 from autoSlowSQLKiller.sentinel import Sentinel
+from autoSlowSQLKiller.modify import SQL
 
 logger = logging.getLogger("sql")
 
@@ -28,6 +29,12 @@ logger = logging.getLogger("sql")
 your sql comment should like '==allow-kill=True' or you defined something startswith '==' 
 as query label, by default query label must greater than 10 or get a ValueError if mock is False.
 when mock set as True, then kill process action just be logging but not execute.
+"""
+
+sql = "select xxx from xxxxx" 
+sql = SQL(sql).sql
+
+"""to execute you sql
 """
 
 
